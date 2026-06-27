@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base target="_top">
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #64748b;
+      --line: #d8dee8;
+      --panel: #ffffff;
+      --soft: #f7f8fb;
+      --accent: #0f766e;
+      --accent-ink: #ffffff;
+      --rose: #db2777;
+      --amber: #b45309;
+      --blue: #2563eb;
+      --shadow: 0 18px 42px rgba(23, 32, 51, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, #f5f7fb 0%, #ffffff 46%, #eef7f5 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .title-block {
+      max-width: 720px;
+    }
+
+    .kicker {
+      margin: 0 0 6px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.14;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 12px 0 0;
+      color: #475569;
+      font-size: 16px;
+      max-width: 680px;
+    }
+
+    .counter {
+      min-width: 148px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.86);
+      padding: 12px 14px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(23, 32, 51, 0.06);
+    }
+
+    .counter strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1.1;
+      color: var(--accent);
+    }
+
+    .counter span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.92fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .selector {
+      padding: 20px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0;
+    }
+
+    .ghost-button,
+    .primary-button {
+      min-height: 42px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .ghost-button {
+      background: #ffffff;
+      color: #334155;
+    }
+
+    .primary-button {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      font-weight: 700;
+    }
+
+    .ghost-button:hover,
+    .primary-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(23, 32, 51, 0.14);
+    }
+
+    .ghost-button:disabled,
+    .primary-button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .category {
+      margin-top: 18px;
+    }
+
+    .category-title {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .chips {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .chip {
+      min-height: 76px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 11px 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: border 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .chip:hover {
+      border-color: #94a3b8;
+      transform: translateY(-1px);
+    }
+
+    .chip.is-selected {
+      border-color: var(--accent);
+      background: #ecfdf5;
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+
+    .chip.is-disabled {
+      opacity: 0.46;
+      cursor: not-allowed;
+    }
+
+    .chip-name {
+      display: block;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .chip-desc {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .result-panel {
+      position: sticky;
+      top: 18px;
+      overflow: hidden;
+    }
+
+    .result-head {
+      padding: 20px 20px 0;
+    }
+
+    .selected-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 34px;
+      margin-top: 12px;
+    }
+
+    .selected-pill {
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .empty {
+      padding: 34px 20px 26px;
+      color: var(--muted);
+    }
+
+    .result-list {
+      display: grid;
+      gap: 12px;
+      padding: 16px 20px 20px;
+    }
+
+    .result-card {
+      border: 1px solid var(--line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 15px;
+    }
+
+    .result-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .rank {
+      display: inline-grid;
+      place-items: center;
+      min-width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--accent);
+      font-weight: 800;
+    }
+
+    .match {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .area-name {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .subtitle {
+      margin: 2px 0 10px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .description {
+      margin: 0 0 12px;
+    }
+
+    .question {
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: var(--soft);
+      font-weight: 700;
+    }
+
+    .meta {
+      display: grid;
+      gap: 8px;
+      color: #475569;
+      font-size: 13px;
+    }
+
+    .meta strong {
+      color: var(--ink);
+    }
+
+    .lesson-list {
+      display: grid;
+      gap: 8px;
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .lesson-list li {
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 8px 10px;
+    }
+
+    .lesson-name {
+      display: block;
+      font-weight: 800;
+    }
+
+    .lesson-detail {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .common {
+      border-top: 1px solid var(--line);
+      background: #f8fafc;
+      padding: 16px 20px;
+      color: #475569;
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      padding: 0 20px 20px;
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        width: min(100% - 24px, 680px);
+        padding-top: 18px;
+      }
+
+      .topbar,
+      .layout {
+        display: block;
+      }
+
+      .counter {
+        margin-top: 16px;
+        width: 100%;
+      }
+
+      .result-panel {
+        position: static;
+        margin-top: 18px;
+      }
+
+      .chips {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .selector,
+      .actions,
+      .counter {
+        display: none;
+      }
+
+      .app {
+        width: 100%;
+        padding: 0;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .panel,
+      .result-card {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="title-block">
+        <p class="kicker">経済経営学部 学びキーワード診断</p>
+        <h1>私の「好き」から見つける経済経営学部</h1>
+        <p class="lead">気になる言葉を選ぶと、近い学びの領域、関連する問い、授業、相談で聞くとよいことが表示されます。</p>
+      </div>
+      <div class="counter" aria-live="polite">
+        <strong id="count">0/3</strong>
+        <span>選択中</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="panel selector" aria-labelledby="selector-title">
+        <div class="section-head">
+          <h2 id="selector-title">気になる言葉を3つまで選ぶ</h2>
+          <button class="ghost-button" type="button" id="resetButton">リセット</button>
+        </div>
+        <div id="keywordGroups"></div>
+      </section>
+
+      <aside class="panel result-panel" aria-live="polite">
+        <div class="result-head">
+          <h2>あなたに近い学び</h2>
+          <div class="selected-list" id="selectedList"></div>
+        </div>
+        <div id="results" class="empty">キーワードを選ぶと、ここに結果が表示されます。</div>
+        <div class="actions">
+          <button class="primary-button" type="button" id="printButton" disabled>印刷</button>
+          <button class="ghost-button" type="button" id="shareButton" disabled>結果URL</button>
+        </div>
+        <div class="common" id="commonMessage"></div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    window.APP_DATA = {"title":"私の「好き」から見つける経済経営学部","areas":[{"areaCode":"G","name":"グローバル","subtitle":"世界とビジネスをつなげて考える","description":"国境を越えてビジネスが行われる現状を知り、海外の経済構造やビジネス慣習を理解しながら、グローバル市場で価値を生み出す力を学びます。","question":"世界の企業は、国や文化の違いを越えてどう動いているのか。","advice":"留学、英語で学ぶ授業、海外企業や国際機関への進路について聞いてみよう。","course":"グローバルリーダー学修コース","color":"#2563eb"},{"areaCode":"MD","name":"組織マネジメント・ダイバーシティ","subtitle":"人と組織の力を引き出す","description":"どうしたら組織をうまく運営できるか、人をどう活かすか、多様性を尊重しながら組織や社会を成長させる方法を考えます。","question":"一人ひとりの強みを活かす組織は、どうつくれるのか。","advice":"HLP、リーダーシップ、チームでの課題解決について聞いてみよう。","course":"ビジネスデザイン学修コース","color":"#0f766e"},{"areaCode":"M","name":"マーケティング・商品企画","subtitle":"選ばれ続ける仕組みを考える","description":"どうしたら売れる商品を開発できるのか、効率的に商品を届けるにはどうしたらよいのかを、市場調査や顧客ニーズの分析から考えます。","question":"なぜ人はその商品やサービスを選ぶのか。","advice":"商品企画、広告、消費者心理、ゼミで扱えるテーマについて聞いてみよう。","course":"ビジネスデザイン学修コース","color":"#db2777"},{"areaCode":"FA","name":"金融・財務","subtitle":"お金の流れから社会と企業を見る","description":"金融市場、企業の資金調達、会計や財務の仕組みを学び、企業や公的機関の活動を数字から理解する力を身につけます。","question":"企業や社会のお金の流れは、どのように判断材料になるのか。","advice":"会計士、税理士、金融機関、資格取得の学び方について聞いてみよう。","course":"金融・財務プロフェッショナル学修コース","color":"#b45309"},{"areaCode":"PD","name":"貧困・開発（社会貢献）","subtitle":"世界の課題に経済と経営から向き合う","description":"アフリカ・アジア地域などの発展途上経済における持続的な開発や国際協力について、ビジネスや政策の観点から問題解決の糸口を探ります。","question":"貧困や格差に、ビジネスや政策はどう向き合えるのか。","advice":"国際協力、NGO、途上国経済、社会貢献とビジネスの関係について聞いてみよう。","course":"グローバルリーダー学修コース","color":"#7c3aed"},{"areaCode":"P","name":"ポリシー・デザイン","subtitle":"社会課題を政策と戦略で動かす","description":"AIと雇用、食料の安定供給、少子高齢化など、日本や世界経済が直面する課題を理解し、効果的な経済政策や企業戦略をデザインします。","question":"複雑な社会課題に、どんな政策や戦略が効くのか。","advice":"公共政策、経済学、企業戦略、公務員や地域課題への進路について聞いてみよう。","course":"ビジネスデザイン学修コース","color":"#dc2626"},{"areaCode":"SA","name":"サステナビリティ＆地域共創","subtitle":"環境と地域の課題をビジネスで解く","description":"気候変動をはじめとする地球環境問題や地域課題に、経済学的視点からどうアプローチし、ビジネスを通じてどう解決するかを探求します。","question":"環境や地域の課題を、ビジネスで解決できるのか。","advice":"SDGs、環境経営、地方創生、地域と企業の連携について聞いてみよう。","course":"ビジネスデザイン学修コース","color":"#16a34a"},{"areaCode":"DS","name":"ソーシャル・データサイエンス","subtitle":"データでビジネスと社会を読み解く","description":"統計やプログラミングの学習を通じてデータ解析能力を鍛え、新商品の開発、新たなビジネスのデザイン、社会課題解決の政策立案に活かします。","question":"データやAIは、ビジネスや働き方をどう変えるのか。","advice":"AI、統計、プログラミング、データ分析を使う授業について聞いてみよう。","course":"全コースから接続しやすい横断領域","color":"#0891b2"}],"keywords":[{"keyword":"人間主義経済","description":"人と社会の幸せを軸に経済を考える","category":"学部の理念","weights":{"P":2,"PD":2,"SA":1}},{"keyword":"人間主義経営","description":"人を大切にする経営や組織を考える","category":"学部の理念","weights":{"MD":2,"M":1,"SA":1}},{"keyword":"マーケティング","description":"選ばれる商品やサービスの仕組みを考える","category":"ビジネス","weights":{"M":3,"DS":1}},{"keyword":"実践的英語力","description":"ビジネスや留学で使える英語を身につける","category":"グローバル","weights":{"G":3,"PD":1}},{"keyword":"SDGs","description":"社会課題を経済や経営から考える","category":"社会課題","weights":{"SA":2,"PD":2,"P":1}},{"keyword":"気候変動","description":"環境問題に経済やビジネスから向き合う","category":"社会課題","weights":{"SA":3,"P":1}},{"keyword":"平和とビジネス","description":"平和や社会貢献とビジネスの関係を考える","category":"社会課題","weights":{"PD":2,"G":1,"SA":1}},{"keyword":"貧困・格差","description":"開発や国際協力の視点から課題を見る","category":"社会課題","weights":{"PD":3,"P":1}},{"keyword":"地方創生","description":"地域の課題を経済やビジネスで考える","category":"地域","weights":{"SA":2,"P":2,"M":1}},{"keyword":"CSR","description":"企業の社会的責任を考える","category":"ビジネス","weights":{"SA":2,"MD":1,"FA":1}},{"keyword":"環境経営","description":"環境と企業経営の両立を考える","category":"ビジネス","weights":{"SA":3,"FA":1}},{"keyword":"リーダーシップ","description":"互いの個性を引き出し合う力を育てる","category":"人と組織","weights":{"MD":3,"G":1,"P":1}},{"keyword":"政策・戦略デザイン","description":"社会課題に効く政策や企業戦略を考える","category":"政策","weights":{"P":3,"M":1,"SA":1}},{"keyword":"生成AIと雇用","description":"AIが働き方や社会をどう変えるか考える","category":"データ","weights":{"DS":3,"P":2,"MD":1}},{"keyword":"ファイナンス","description":"金融や財務の仕組みを学ぶ","category":"お金","weights":{"FA":3,"DS":1}},{"keyword":"データサイエンス","description":"統計やプログラミングで課題を分析する","category":"データ","weights":{"DS":3,"M":1,"P":1}},{"keyword":"海外で働きたい","description":"世界をフィールドにして働く将来像","category":"将来","weights":{"G":3,"PD":1}},{"keyword":"商品企画に興味がある","description":"新しい商品やサービスを考えたい","category":"将来","weights":{"M":3,"DS":1}},{"keyword":"会計・資格に興味がある","description":"会計士、税理士、金融の専門性を磨きたい","category":"将来","weights":{"FA":3}},{"keyword":"チームで課題解決したい","description":"仲間と協力して価値をつくりたい","category":"将来","weights":{"MD":2,"SA":1,"P":1}}],"lessons":[{"areaCode":"G","name":"グローバル経済 I・II","year":"2年次","term":"春・秋","description":"世界経済や国際取引の流れをつかむ"},{"areaCode":"G","name":"国際経済論","year":"3年次","term":"春","description":"国際的な経済の動きや国同士の関係を学ぶ"},{"areaCode":"G","name":"多国籍企業論","year":"3年次","term":"秋","description":"世界で活動する企業の戦略や課題を考える"},{"areaCode":"G","name":"Sustainable Business & Management","year":"3年次","term":"春","description":"持続可能性とビジネスを英語科目にも接続して考える"},{"areaCode":"MD","name":"リーダーシップ論","year":"2年次","term":"春","description":"人と組織を動かすリーダーシップを学ぶ"},{"areaCode":"MD","name":"人的資源管理論","year":"2年次","term":"秋","description":"人材をどう活かすかを経営の視点から考える"},{"areaCode":"MD","name":"経営戦略論","year":"2年次","term":"秋","description":"企業が競争の中でどう方針を立てるかを学ぶ"},{"areaCode":"MD","name":"経営組織論","year":"3年次","term":"秋","description":"組織の仕組みやマネジメントを考える"},{"areaCode":"M","name":"マーケティング","year":"2年次","term":"春","description":"商品やサービスが選ばれ続ける仕組みを考える"},{"areaCode":"M","name":"消費者行動論","year":"2年次","term":"春","description":"人がなぜ買うのかを心理や行動から考える"},{"areaCode":"M","name":"ビジネスデザイン論","year":"2年次","term":"秋","description":"課題を発見しビジネスとして形にする方法を学ぶ"},{"areaCode":"M","name":"サービスマーケティング","year":"2年次","term":"春","description":"サービスの価値づくりと届け方を考える"},{"areaCode":"FA","name":"会計学","year":"2年次","term":"秋","description":"企業活動を数字で記録し理解する基礎を学ぶ"},{"areaCode":"FA","name":"金融論","year":"2年次","term":"秋","description":"金融市場や資金の流れを学ぶ"},{"areaCode":"FA","name":"証券市場論","year":"3年次","term":"春","description":"証券市場の仕組みと企業金融を考える"},{"areaCode":"FA","name":"企業価値管理会計","year":"2年次","term":"秋","description":"企業価値や会計情報を経営判断に活かす"},{"areaCode":"PD","name":"開発と貧困の経済学","year":"2年次","term":"秋","description":"貧困や開発課題を経済学から考える"},{"areaCode":"PD","name":"国際開発協力論","year":"3年次","term":"春","description":"国際協力や開発支援の仕組みを学ぶ"},{"areaCode":"PD","name":"アフリカ経済論","year":"3年次","term":"春","description":"アフリカ地域の経済や社会課題を考える"},{"areaCode":"PD","name":"アジア経済・経営論","year":"3年次","term":"秋","description":"アジア地域の経済や企業活動を学ぶ"},{"areaCode":"P","name":"財政学","year":"2年次","term":"春","description":"政府のお金の使い方や政策を考える"},{"areaCode":"P","name":"企業論","year":"2年次","term":"秋","description":"企業の役割や社会との関係を学ぶ"},{"areaCode":"P","name":"農業経済論","year":"3年次","term":"秋","description":"食料や地域産業を経済の視点から考える"},{"areaCode":"P","name":"マクロ経済学中級 I・II","year":"2年次","term":"春・秋","description":"社会全体の経済の動きを分析する"},{"areaCode":"SA","name":"気候変動の経済学","year":"2年次","term":"春","description":"気候変動を経済学の視点から考える"},{"areaCode":"SA","name":"環境経済論","year":"2年次","term":"秋","description":"環境問題と経済活動の関係を学ぶ"},{"areaCode":"SA","name":"環境マネジメント","year":"3年次","term":"春","description":"企業や組織の環境対応を考える"},{"areaCode":"SA","name":"ローカルビジネス論","year":"2年次","term":"秋","description":"地域課題とビジネスの接点を考える"},{"areaCode":"DS","name":"データサイエンス","year":"2年次","term":"秋","description":"データ分析の基礎を学ぶ"},{"areaCode":"DS","name":"データサイエンス演習","year":"2年次","term":"秋","description":"実際にデータを扱いながら分析する"},{"areaCode":"DS","name":"ビジネスAI演習","year":"3年次","term":"秋","description":"AIをビジネス課題にどう使うかを学ぶ"},{"areaCode":"DS","name":"プログラミング論","year":"3年次","term":"秋","description":"分析や開発の基礎になるプログラミングを学ぶ"}],"selectionLimit":3,"commonMessage":"経済・経営の理論をベースに、実際の課題解決、リーダーシップ、英語力にもつながる実践的な学びです。"};
+  </script>
+  <script>
+    const appData = window.APP_DATA;
+    const selected = new Set();
+    const keywordGroups = document.getElementById('keywordGroups');
+    const count = document.getElementById('count');
+    const selectedList = document.getElementById('selectedList');
+    const results = document.getElementById('results');
+    const resetButton = document.getElementById('resetButton');
+    const printButton = document.getElementById('printButton');
+    const shareButton = document.getElementById('shareButton');
+    const commonMessage = document.getElementById('commonMessage');
+
+    commonMessage.textContent = appData.commonMessage;
+
+    initFromUrl();
+    renderKeywords();
+    renderState();
+
+    resetButton.addEventListener('click', () => {
+      selected.clear();
+      updateUrl();
+      renderState();
+    });
+
+    printButton.addEventListener('click', () => window.print());
+
+    shareButton.addEventListener('click', async () => {
+      const url = buildResultUrl();
+      try {
+        await navigator.clipboard.writeText(url);
+        shareButton.textContent = 'コピー済み';
+        setTimeout(() => shareButton.textContent = '結果URL', 1400);
+      } catch (error) {
+        prompt('このURLをコピーしてください', url);
+      }
+    });
+
+    function renderKeywords() {
+      const grouped = appData.keywords.reduce((groups, item, index) => {
+        const category = item.category || 'その他';
+        if (!groups[category]) groups[category] = [];
+        groups[category].push({ ...item, index });
+        return groups;
+      }, {});
+
+      keywordGroups.innerHTML = Object.entries(grouped).map(([category, items]) => `
+        <section class="category">
+          <p class="category-title">${escapeHtml(category)}</p>
+          <div class="chips">
+            ${items.map(item => keywordButton(item)).join('')}
+          </div>
+        </section>
+      `).join('');
+
+      keywordGroups.querySelectorAll('.chip').forEach(button => {
+        button.addEventListener('click', () => toggleKeyword(Number(button.dataset.index)));
+      });
+    }
+
+    function keywordButton(item) {
+      return `
+        <button type="button" class="chip" data-index="${item.index}">
+          <span class="chip-name">${escapeHtml(item.keyword)}</span>
+          <span class="chip-desc">${escapeHtml(item.description || '')}</span>
+        </button>
+      `;
+    }
+
+    function toggleKeyword(index) {
+      if (selected.has(index)) {
+        selected.delete(index);
+      } else if (selected.size < appData.selectionLimit) {
+        selected.add(index);
+      }
+      updateUrl();
+      renderState();
+    }
+
+    function renderState() {
+      count.textContent = `${selected.size}/${appData.selectionLimit}`;
+      const selectedItems = getSelectedItems();
+      selectedList.innerHTML = selectedItems.map(item => `
+        <span class="selected-pill">${escapeHtml(item.keyword)}</span>
+      `).join('');
+
+      document.querySelectorAll('.chip').forEach(button => {
+        const index = Number(button.dataset.index);
+        const isSelected = selected.has(index);
+        const isDisabled = !isSelected && selected.size >= appData.selectionLimit;
+        button.classList.toggle('is-selected', isSelected);
+        button.classList.toggle('is-disabled', isDisabled);
+        button.setAttribute('aria-pressed', String(isSelected));
+      });
+
+      printButton.disabled = selected.size === 0;
+      shareButton.disabled = selected.size === 0;
+      renderResults(selectedItems);
+    }
+
+    function renderResults(selectedItems) {
+      if (!selectedItems.length) {
+        results.className = 'empty';
+        results.innerHTML = 'キーワードを選ぶと、ここに結果が表示されます。';
+        return;
+      }
+
+      const scored = scoreAreas(selectedItems);
+      results.className = 'result-list';
+      results.innerHTML = scored.map((entry, index) => resultCard(entry, index)).join('');
+    }
+
+    function scoreAreas(selectedItems) {
+      const scores = {};
+      selectedItems.forEach(item => {
+        Object.entries(item.weights || {}).forEach(([code, value]) => {
+          scores[code] = (scores[code] || 0) + Number(value || 0);
+        });
+      });
+
+      const max = Math.max(1, ...Object.values(scores));
+      return appData.areas
+        .map(area => ({
+          area,
+          score: scores[area.areaCode] || 0,
+          match: Math.round(((scores[area.areaCode] || 0) / max) * 100),
+          lessons: appData.lessons.filter(lesson => lesson.areaCode === area.areaCode).slice(0, 3),
+        }))
+        .filter(entry => entry.score > 0)
+        .sort((a, b) => b.score - a.score || a.area.name.localeCompare(b.area.name, 'ja'))
+        .slice(0, 3);
+    }
+
+    function resultCard(entry, index) {
+      const area = entry.area;
+      const style = `style="--accent: ${escapeAttr(area.color || '#334155')}"`;
+      return `
+        <article class="result-card" ${style}>
+          <div class="result-top">
+            <div>
+              <span class="rank">${index + 1}</span>
+              <h3 class="area-name">${escapeHtml(area.name)}</h3>
+            </div>
+            <span class="match">近さ ${entry.match}%</span>
+          </div>
+          <p class="subtitle">${escapeHtml(area.subtitle || '')}</p>
+          <p class="description">${escapeHtml(area.description || '')}</p>
+          <p class="question">${escapeHtml(area.question || '')}</p>
+          <div class="meta">
+            <div><strong>関連しやすいコース：</strong>${escapeHtml(area.course || '')}</div>
+            <div><strong>相談で聞くこと：</strong>${escapeHtml(area.advice || '')}</div>
+            <div>
+              <strong>関連する授業：</strong>
+              <ul class="lesson-list">
+                ${entry.lessons.map(lesson => `
+                  <li>
+                    <span class="lesson-name">${escapeHtml(lesson.name)}</span>
+                    <span class="lesson-detail">${escapeHtml([lesson.year, lesson.term, lesson.description].filter(Boolean).join(' / '))}</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function getSelectedItems() {
+      return Array.from(selected).map(index => appData.keywords[index]).filter(Boolean);
+    }
+
+    function initFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('k');
+      if (!raw) return;
+      raw.split(',').map(Number).forEach(index => {
+        if (Number.isInteger(index) && appData.keywords[index] && selected.size < appData.selectionLimit) {
+          selected.add(index);
+        }
+      });
+    }
+
+    function updateUrl() {
+      const url = buildResultUrl();
+      if (history.replaceState) history.replaceState(null, '', url);
+    }
+
+    function buildResultUrl() {
+      const url = new URL(window.location.href);
+      const values = Array.from(selected).sort((a, b) => a - b);
+      if (values.length) {
+        url.searchParams.set('k', values.join(','));
+      } else {
+        url.searchParams.delete('k');
+      }
+      return url.toString();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function escapeAttr(value) {
+      return String(value).replace(/[^#(),.% a-zA-Z0-9-]/g, '');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base target="_top">
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #64748b;
+      --line: #d8dee8;
+      --panel: #ffffff;
+      --soft: #f7f8fb;
+      --accent: #0f766e;
+      --accent-ink: #ffffff;
+      --rose: #db2777;
+      --amber: #b45309;
+      --blue: #2563eb;
+      --shadow: 0 18px 42px rgba(23, 32, 51, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, #f5f7fb 0%, #ffffff 46%, #eef7f5 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .title-block {
+      max-width: 720px;
+    }
+
+    .kicker {
+      margin: 0 0 6px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.14;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 12px 0 0;
+      color: #475569;
+      font-size: 16px;
+      max-width: 680px;
+    }
+
+    .counter {
+      min-width: 148px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.86);
+      padding: 12px 14px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(23, 32, 51, 0.06);
+    }
+
+    .counter strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1.1;
+      color: var(--accent);
+    }
+
+    .counter span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.92fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .selector {
+      padding: 20px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 0;
+    }
+
+    .ghost-button,
+    .primary-button {
+      min-height: 42px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .ghost-button {
+      background: #ffffff;
+      color: #334155;
+    }
+
+    .primary-button {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      font-weight: 700;
+    }
+
+    .ghost-button:hover,
+    .primary-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(23, 32, 51, 0.14);
+    }
+
+    .ghost-button:disabled,
+    .primary-button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .category {
+      margin-top: 18px;
+    }
+
+    .category-title {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .chips {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .chip {
+      min-height: 76px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 11px 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: border 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .chip:hover {
+      border-color: #94a3b8;
+      transform: translateY(-1px);
+    }
+
+    .chip.is-selected {
+      border-color: var(--accent);
+      background: #ecfdf5;
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+
+    .chip.is-disabled {
+      opacity: 0.46;
+      cursor: not-allowed;
+    }
+
+    .chip-name {
+      display: block;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .chip-desc {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .result-panel {
+      position: sticky;
+      top: 18px;
+      overflow: hidden;
+    }
+
+    .result-head {
+      padding: 20px 20px 0;
+    }
+
+    .selected-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 34px;
+      margin-top: 12px;
+    }
+
+    .selected-pill {
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .empty {
+      padding: 34px 20px 26px;
+      color: var(--muted);
+    }
+
+    .result-list {
+      display: grid;
+      gap: 12px;
+      padding: 16px 20px 20px;
+    }
+
+    .result-card {
+      border: 1px solid var(--line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 15px;
+    }
+
+    .result-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .rank {
+      display: inline-grid;
+      place-items: center;
+      min-width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--accent);
+      font-weight: 800;
+    }
+
+    .match {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .area-name {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .subtitle {
+      margin: 2px 0 10px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .description {
+      margin: 0 0 12px;
+    }
+
+    .question {
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: var(--soft);
+      font-weight: 700;
+    }
+
+    .meta {
+      display: grid;
+      gap: 8px;
+      color: #475569;
+      font-size: 13px;
+    }
+
+    .meta strong {
+      color: var(--ink);
+    }
+
+    .lesson-list {
+      display: grid;
+      gap: 8px;
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .lesson-list li {
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 8px 10px;
+    }
+
+    .lesson-name {
+      display: block;
+      font-weight: 800;
+    }
+
+    .lesson-detail {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .common {
+      border-top: 1px solid var(--line);
+      background: #f8fafc;
+      padding: 16px 20px;
+      color: #475569;
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      padding: 0 20px 20px;
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        width: min(100% - 24px, 680px);
+        padding-top: 18px;
+      }
+
+      .topbar,
+      .layout {
+        display: block;
+      }
+
+      .counter {
+        margin-top: 16px;
+        width: 100%;
+      }
+
+      .result-panel {
+        position: static;
+        margin-top: 18px;
+      }
+
+      .chips {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .selector,
+      .actions,
+      .counter {
+        display: none;
+      }
+
+      .app {
+        width: 100%;
+        padding: 0;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .panel,
+      .result-card {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="title-block">
+        <p class="kicker">経済経営学部 学びキーワード診断</p>
+        <h1>私の「好き」から見つける経済経営学部</h1>
+        <p class="lead">気になる言葉を選ぶと、近い学びの領域、関連する問い、授業、相談で聞くとよいことが表示されます。</p>
+      </div>
+      <div class="counter" aria-live="polite">
+        <strong id="count">0/3</strong>
+        <span>選択中</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="panel selector" aria-labelledby="selector-title">
+        <div class="section-head">
+          <h2 id="selector-title">気になる言葉を3つまで選ぶ</h2>
+          <button class="ghost-button" type="button" id="resetButton">リセット</button>
+        </div>
+        <div id="keywordGroups"></div>
+      </section>
+
+      <aside class="panel result-panel" aria-live="polite">
+        <div class="result-head">
+          <h2>あなたに近い学び</h2>
+          <div class="selected-list" id="selectedList"></div>
+        </div>
+        <div id="results" class="empty">キーワードを選ぶと、ここに結果が表示されます。</div>
+        <div class="actions">
+          <button class="primary-button" type="button" id="printButton" disabled>印刷</button>
+          <button class="ghost-button" type="button" id="shareButton" disabled>結果URL</button>
+        </div>
+        <div class="common" id="commonMessage"></div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    window.APP_DATA = <?!= initialData ?>;
+  </script>
+  <script>
+    const appData = window.APP_DATA;
+    const selected = new Set();
+    const keywordGroups = document.getElementById('keywordGroups');
+    const count = document.getElementById('count');
+    const selectedList = document.getElementById('selectedList');
+    const results = document.getElementById('results');
+    const resetButton = document.getElementById('resetButton');
+    const printButton = document.getElementById('printButton');
+    const shareButton = document.getElementById('shareButton');
+    const commonMessage = document.getElementById('commonMessage');
+
+    commonMessage.textContent = appData.commonMessage;
+
+    initFromUrl();
+    renderKeywords();
+    renderState();
+
+    resetButton.addEventListener('click', () => {
+      selected.clear();
+      updateUrl();
+      renderState();
+    });
+
+    printButton.addEventListener('click', () => window.print());
+
+    shareButton.addEventListener('click', async () => {
+      const url = buildResultUrl();
+      try {
+        await navigator.clipboard.writeText(url);
+        shareButton.textContent = 'コピー済み';
+        setTimeout(() => shareButton.textContent = '結果URL', 1400);
+      } catch (error) {
+        prompt('このURLをコピーしてください', url);
+      }
+    });
+
+    function renderKeywords() {
+      const grouped = appData.keywords.reduce((groups, item, index) => {
+        const category = item.category || 'その他';
+        if (!groups[category]) groups[category] = [];
+        groups[category].push({ ...item, index });
+        return groups;
+      }, {});
+
+      keywordGroups.innerHTML = Object.entries(grouped).map(([category, items]) => `
+        <section class="category">
+          <p class="category-title">${escapeHtml(category)}</p>
+          <div class="chips">
+            ${items.map(item => keywordButton(item)).join('')}
+          </div>
+        </section>
+      `).join('');
+
+      keywordGroups.querySelectorAll('.chip').forEach(button => {
+        button.addEventListener('click', () => toggleKeyword(Number(button.dataset.index)));
+      });
+    }
+
+    function keywordButton(item) {
+      return `
+        <button type="button" class="chip" data-index="${item.index}">
+          <span class="chip-name">${escapeHtml(item.keyword)}</span>
+          <span class="chip-desc">${escapeHtml(item.description || '')}</span>
+        </button>
+      `;
+    }
+
+    function toggleKeyword(index) {
+      if (selected.has(index)) {
+        selected.delete(index);
+      } else if (selected.size < appData.selectionLimit) {
+        selected.add(index);
+      }
+      updateUrl();
+      renderState();
+    }
+
+    function renderState() {
+      count.textContent = `${selected.size}/${appData.selectionLimit}`;
+      const selectedItems = getSelectedItems();
+      selectedList.innerHTML = selectedItems.map(item => `
+        <span class="selected-pill">${escapeHtml(item.keyword)}</span>
+      `).join('');
+
+      document.querySelectorAll('.chip').forEach(button => {
+        const index = Number(button.dataset.index);
+        const isSelected = selected.has(index);
+        const isDisabled = !isSelected && selected.size >= appData.selectionLimit;
+        button.classList.toggle('is-selected', isSelected);
+        button.classList.toggle('is-disabled', isDisabled);
+        button.setAttribute('aria-pressed', String(isSelected));
+      });
+
+      printButton.disabled = selected.size === 0;
+      shareButton.disabled = selected.size === 0;
+      renderResults(selectedItems);
+    }
+
+    function renderResults(selectedItems) {
+      if (!selectedItems.length) {
+        results.className = 'empty';
+        results.innerHTML = 'キーワードを選ぶと、ここに結果が表示されます。';
+        return;
+      }
+
+      const scored = scoreAreas(selectedItems);
+      results.className = 'result-list';
+      results.innerHTML = scored.map((entry, index) => resultCard(entry, index)).join('');
+    }
+
+    function scoreAreas(selectedItems) {
+      const scores = {};
+      selectedItems.forEach(item => {
+        Object.entries(item.weights || {}).forEach(([code, value]) => {
+          scores[code] = (scores[code] || 0) + Number(value || 0);
+        });
+      });
+
+      const max = Math.max(1, ...Object.values(scores));
+      return appData.areas
+        .map(area => ({
+          area,
+          score: scores[area.areaCode] || 0,
+          match: Math.round(((scores[area.areaCode] || 0) / max) * 100),
+          lessons: appData.lessons.filter(lesson => lesson.areaCode === area.areaCode).slice(0, 3),
+        }))
+        .filter(entry => entry.score > 0)
+        .sort((a, b) => b.score - a.score || a.area.name.localeCompare(b.area.name, 'ja'))
+        .slice(0, 3);
+    }
+
+    function resultCard(entry, index) {
+      const area = entry.area;
+      const style = `style="--accent: ${escapeAttr(area.color || '#334155')}"`;
+      return `
+        <article class="result-card" ${style}>
+          <div class="result-top">
+            <div>
+              <span class="rank">${index + 1}</span>
+              <h3 class="area-name">${escapeHtml(area.name)}</h3>
+            </div>
+            <span class="match">近さ ${entry.match}%</span>
+          </div>
+          <p class="subtitle">${escapeHtml(area.subtitle || '')}</p>
+          <p class="description">${escapeHtml(area.description || '')}</p>
+          <p class="question">${escapeHtml(area.question || '')}</p>
+          <div class="meta">
+            <div><strong>関連しやすいコース：</strong>${escapeHtml(area.course || '')}</div>
+            <div><strong>相談で聞くこと：</strong>${escapeHtml(area.advice || '')}</div>
+            <div>
+              <strong>関連する授業：</strong>
+              <ul class="lesson-list">
+                ${entry.lessons.map(lesson => `
+                  <li>
+                    <span class="lesson-name">${escapeHtml(lesson.name)}</span>
+                    <span class="lesson-detail">${escapeHtml([lesson.year, lesson.term, lesson.description].filter(Boolean).join(' / '))}</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function getSelectedItems() {
+      return Array.from(selected).map(index => appData.keywords[index]).filter(Boolean);
+    }
+
+    function initFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('k');
+      if (!raw) return;
+      raw.split(',').map(Number).forEach(index => {
+        if (Number.isInteger(index) && appData.keywords[index] && selected.size < appData.selectionLimit) {
+          selected.add(index);
+        }
+      });
+    }
+
+    function updateUrl() {
+      const url = buildResultUrl();
+      if (history.replaceState) history.replaceState(null, '', url);
+    }
+
+    function buildResultUrl() {
+      const url = new URL(window.location.href);
+      const values = Array.from(selected).sort((a, b) => a - b);
+      if (values.length) {
+        url.searchParams.set('k', values.join(','));
+      } else {
+        url.searchParams.delete('k');
+      }
+      return url.toString();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function escapeAttr(value) {
+      return String(value).replace(/[^#(),.% a-zA-Z0-9-]/g, '');
+    }
+  </script>
+</body>
+</html>
