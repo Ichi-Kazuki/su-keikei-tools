@@ -26,15 +26,15 @@
 
     <main class="app-shell">
       <aside class="control-panel" aria-label="条件">
-        <section class="panel-section">
+        <section class="panel-section module-panel">
           <div class="section-heading">
             <h2>モジュール</h2>
-            <button class="text-button" type="button" id="toggleAllModules">すべて解除</button>
+            <button class="text-button" type="button" id="toggleAllModules">すべて選択</button>
           </div>
           <div class="module-grid" id="moduleList"></div>
         </section>
 
-        <section class="panel-section compact-controls">
+        <section class="panel-section compact-controls filter-panel">
           <div>
             <h2>学期</h2>
             <div class="segmented" id="semesterControls">
@@ -50,16 +50,14 @@
           </div>
           <div>
             <h2>年次</h2>
-            <div class="segmented four" id="yearControls">
-              <label><input type="radio" name="year" value="1"><span>1</span></label>
+            <div class="segmented" id="yearControls">
               <label><input type="radio" name="year" value="2"><span>2</span></label>
               <label><input type="radio" name="year" value="3"><span>3</span></label>
-              <label><input type="radio" name="year" value="4"><span>4</span></label>
             </div>
           </div>
         </section>
 
-        <section class="panel-section">
+        <section class="panel-section completed-panel">
           <div class="section-heading">
             <h2>履修済み</h2>
             <button class="text-button" type="button" id="clearCompleted">解除</button>
@@ -68,9 +66,9 @@
           <div class="completed-list" id="completedList"></div>
         </section>
 
-        <section class="action-row" aria-label="操作">
+        <section class="action-row planner-actions" aria-label="操作">
           <button type="button" class="secondary-button" id="resetButton">リセット</button>
-          <button type="button" class="secondary-button" id="copyButton">コピー</button>
+          <button type="button" class="secondary-button" id="copyButton">URLコピー</button>
           <button type="button" class="primary-button" id="printButton">印刷</button>
         </section>
       </aside>
@@ -84,15 +82,11 @@
         <section class="tab-panel" id="planPanel">
           <div class="status-strip">
             <div>
-              <span>データ</span>
-              <strong id="dataSource">-</strong>
-            </div>
-            <div>
               <span>開講枠</span>
               <strong id="slotCount">0</strong>
             </div>
             <div>
-              <span>衝突</span>
+              <span>重複</span>
               <strong id="conflictCount">0</strong>
             </div>
           </div>

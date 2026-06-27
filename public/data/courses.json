@@ -7,7 +7,7 @@
     "period": 5,
     "semester": "春",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -19,7 +19,7 @@
     "period": 4,
     "semester": "春",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -31,7 +31,7 @@
     "period": 2,
     "semester": "春",
     "year": 3,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -43,7 +43,7 @@
     "period": 3,
     "semester": "春",
     "year": 3,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -55,7 +55,7 @@
     "period": 3,
     "semester": "秋",
     "year": 3,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -67,7 +67,7 @@
     "period": 4,
     "semester": "秋",
     "year": 3,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -79,7 +79,7 @@
     "period": 2,
     "semester": "秋",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -91,7 +91,7 @@
     "period": 4,
     "semester": "春",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -103,7 +103,7 @@
     "period": 4,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -115,7 +115,7 @@
     "period": 4,
     "semester": "春",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -127,7 +127,7 @@
     "period": 5,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -139,7 +139,7 @@
     "period": 1,
     "semester": "春",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -151,7 +151,7 @@
     "period": 1,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -163,7 +163,7 @@
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -175,7 +175,7 @@
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -187,7 +187,7 @@
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -199,7 +199,7 @@
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -211,7 +211,7 @@
     "period": 2,
     "semester": "秋",
     "year": 3,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -223,7 +223,7 @@
     "period": 2,
     "semester": "秋",
     "year": 3,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -235,7 +235,7 @@
     "period": 5,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -247,7 +247,7 @@
     "period": 4,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -259,7 +259,7 @@
     "period": 4,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -271,7 +271,7 @@
     "period": 4,
     "semester": "春",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -283,7 +283,7 @@
     "period": 4,
     "semester": "秋",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -295,7 +295,7 @@
     "period": 4,
     "semester": "春",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -307,7 +307,7 @@
     "period": 1,
     "semester": "春",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -319,7 +319,7 @@
     "period": 4,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -331,7 +331,7 @@
     "period": 4,
     "semester": "秋",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -343,7 +343,7 @@
     "period": 2,
     "semester": "秋",
     "year": 3,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -355,7 +355,7 @@
     "period": 3,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -367,7 +367,7 @@
     "period": 4,
     "semester": "春",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -379,7 +379,7 @@
     "period": 1,
     "semester": "春",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -391,7 +391,7 @@
     "period": 5,
     "semester": "春",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -403,7 +403,7 @@
     "period": 1,
     "semester": "春",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -415,7 +415,7 @@
     "period": 3,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -427,7 +427,7 @@
     "period": 3,
     "semester": "秋",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -439,7 +439,7 @@
     "period": 5,
     "semester": "秋",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -451,7 +451,7 @@
     "period": 4,
     "semester": "秋",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -463,7 +463,7 @@
     "period": 4,
     "semester": "秋",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -475,7 +475,7 @@
     "period": 3,
     "semester": "春",
     "year": 3,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -487,7 +487,7 @@
     "period": 4,
     "semester": "春",
     "year": 3,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -499,7 +499,7 @@
     "period": 1,
     "semester": "秋",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -511,7 +511,7 @@
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -523,7 +523,7 @@
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -535,7 +535,7 @@
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -547,7 +547,7 @@
     "period": 2,
     "semester": "春",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -559,7 +559,7 @@
     "period": 5,
     "semester": "秋",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -571,7 +571,7 @@
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -583,7 +583,7 @@
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -595,7 +595,7 @@
     "period": 5,
     "semester": "春",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -607,7 +607,7 @@
     "period": 4,
     "semester": "春",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -619,7 +619,7 @@
     "period": 4,
     "semester": "秋",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -631,7 +631,7 @@
     "period": 2,
     "semester": "春",
     "year": 3,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -643,7 +643,7 @@
     "period": 4,
     "semester": "春",
     "year": 3,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -655,7 +655,7 @@
     "period": 4,
     "semester": "春",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -667,7 +667,7 @@
     "period": 3,
     "semester": "春",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -679,7 +679,7 @@
     "period": 1,
     "semester": "秋",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -691,43 +691,43 @@
     "period": 3,
     "semester": "春",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
   {
     "id": "S0059",
-    "name": "マクロ経済学中級 II",
+    "name": "ミクロ経済学中級 II",
     "module": "P",
     "day": "金",
     "period": 1,
     "semester": "春",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
   {
     "id": "S0060",
+    "name": "マクロ経済学中級 II",
+    "module": "P",
+    "day": "金",
+    "period": 1,
+    "semester": "秋",
+    "year": 2,
+    "credits": 2,
+    "note": "",
+    "completed": false
+  },
+  {
+    "id": "S0061",
     "name": "マクロ経済学中級 I",
     "module": "P",
     "day": "火",
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
-    "note": "",
-    "completed": false
-  },
-  {
-    "id": "S0061",
-    "name": "マクロ経済学中級 II",
-    "module": "P",
-    "day": "金",
-    "period": 1,
-    "semester": "秋",
-    "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -739,7 +739,7 @@
     "period": 3,
     "semester": "春",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -751,7 +751,7 @@
     "period": 2,
     "semester": "春",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -763,7 +763,7 @@
     "period": 4,
     "semester": "秋",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -775,7 +775,7 @@
     "period": 5,
     "semester": "秋",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -787,7 +787,7 @@
     "period": 2,
     "semester": "秋",
     "year": 3,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -799,7 +799,7 @@
     "period": 3,
     "semester": "秋",
     "year": 3,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -811,7 +811,7 @@
     "period": 2,
     "semester": "春",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -823,7 +823,7 @@
     "period": 3,
     "semester": "春",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -835,7 +835,7 @@
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -847,7 +847,7 @@
     "period": 3,
     "semester": "春",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -859,7 +859,7 @@
     "period": 2,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -871,7 +871,7 @@
     "period": 4,
     "semester": "春",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -883,7 +883,7 @@
     "period": 4,
     "semester": "秋",
     "year": 3,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -895,7 +895,7 @@
     "period": 5,
     "semester": "秋",
     "year": 3,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -907,7 +907,7 @@
     "period": 4,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -919,7 +919,7 @@
     "period": 4,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -931,7 +931,7 @@
     "period": 2,
     "semester": "秋",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -943,7 +943,7 @@
     "period": 3,
     "semester": "秋",
     "year": 3,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -955,7 +955,7 @@
     "period": 3,
     "semester": "秋",
     "year": 2,
-    "credits": 2.0,
+    "credits": 2,
     "note": "",
     "completed": false
   },
@@ -967,7 +967,7 @@
     "period": 3,
     "semester": "秋",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -979,7 +979,7 @@
     "period": 3,
     "semester": "秋",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -991,7 +991,7 @@
     "period": 2,
     "semester": "春",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -1003,7 +1003,7 @@
     "period": 2,
     "semester": "春",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   },
@@ -1015,7 +1015,7 @@
     "period": 2,
     "semester": "春",
     "year": 2,
-    "credits": 4.0,
+    "credits": 4,
     "note": "",
     "completed": false
   },
@@ -1027,7 +1027,7 @@
     "period": 4,
     "semester": "春",
     "year": 2,
-    "credits": 0.0,
+    "credits": 0,
     "note": "",
     "completed": false
   }

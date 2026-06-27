@@ -2,35 +2,65 @@
   "modules": [
     {
       "code": "G",
-      "name": "グローバル"
+      "name": "グローバル",
+      "group": "A"
     },
     {
       "code": "MD",
-      "name": "組織マネジメント・ダイバーシティ"
+      "name": "組織マネジメント・ダイバーシティ",
+      "group": "A"
     },
     {
       "code": "M",
-      "name": "マーケティング"
+      "name": "マーケティング",
+      "group": "A"
     },
     {
       "code": "FA",
-      "name": "金融・財務"
+      "name": "金融・財務",
+      "group": "A"
     },
     {
       "code": "PD",
-      "name": "貧困・開発（社会貢献）"
+      "name": "貧困・開発（社会貢献）",
+      "group": "B"
     },
     {
       "code": "P",
-      "name": "ポリシー・デザイン"
+      "name": "ポリシー・デザイン",
+      "group": "B"
     },
     {
       "code": "SA",
-      "name": "サステナビリティ＆地域共創"
+      "name": "サステナビリティ＆地域共創",
+      "group": "B"
     },
     {
       "code": "DS",
-      "name": "ソーシャル・データサイエンス"
+      "name": "ソーシャル・データサイエンス",
+      "group": "B"
+    }
+  ],
+  "moduleGroups": [
+    {
+      "code": "A",
+      "name": "A群",
+      "modules": [
+        "G",
+        "MD",
+        "M",
+        "FA"
+      ]
+    },
+    {
+      "code": "B",
+      "name": "B群",
+      "modules": [
+        "PD",
+        "P",
+        "SA",
+        "DS"
+      ]
     }
   ],
   "days": [
@@ -47,7 +77,6 @@
     4,
     5
   ],
-  "dataSource": "static JSON: courses.json",
   "facultyInfo": {
     "title": "経済経営学部 ビジネス学科",
     "basics": [
@@ -91,27 +120,11 @@
       "合計124単位以上、通算GPA 2以上。",
       "ビジネス学科専門科目は必修18単位、選択必修6単位、選択46単位。",
       "選択した学修コースから18単位以上、A群モジュールから10単位以上、B群モジュールから6単位以上。"
-    ],
-    "sources": [
-      "経済経営履修要項.pdf",
-      "経済経営学部 _ 創価大学.pdf",
-      "学部の概要 _ 経済経営学部 _ 創価大学.pdf",
-      "学部の特長 _ 経済経営学部 _ 創価大学.pdf",
-      "CAMPUS_GUIDE_2026.pdf"
     ]
   },
   "defaults": {
-    "modules": [
-      "G",
-      "MD",
-      "M",
-      "FA",
-      "PD",
-      "P",
-      "SA",
-      "DS"
-    ],
-    "semester": "秋",
+    "modules": [],
+    "semester": "春",
     "year": 2
   }
 }

@@ -14,21 +14,23 @@
         <h1>私の「好き」から見つける経済経営学部</h1>
         <p class="lead">気になる言葉を選ぶと、近い学びの領域、関連する問い、授業、相談で聞くとよいことが表示されます。</p>
       </div>
-      <div class="counter" aria-live="polite">
-        <strong id="count">0/3</strong>
-        <span>選択中</span>
-      </div>
     </header>
 
-    <div class="layout">
-      <section class="panel selector" aria-labelledby="selector-title">
+    <section class="panel keyword-tag-panel" aria-labelledby="selector-title">
         <div class="section-head">
           <h2 id="selector-title">気になる言葉を3つまで選ぶ</h2>
-          <button class="ghost-button" type="button" id="resetButton">リセット</button>
+          <div class="tag-panel-actions">
+            <div class="counter" aria-live="polite">
+              <strong id="count">0/3</strong>
+              <span>選択中</span>
+            </div>
+            <button class="ghost-button" type="button" id="resetButton">リセット</button>
+          </div>
         </div>
         <div id="keywordGroups"></div>
       </section>
 
+    <div class="layout">
       <aside class="panel result-panel" aria-live="polite">
         <div class="result-head">
           <h2>あなたに近い学び</h2>

@@ -42,21 +42,11 @@ async function initKeyword() {
       });
   
       function renderKeywords() {
-        const grouped = appData.keywords.reduce((groups, item, index) => {
-          const category = item.category || 'その他';
-          if (!groups[category]) groups[category] = [];
-          groups[category].push({ ...item, index });
-          return groups;
-        }, {});
-  
-        keywordGroups.innerHTML = Object.entries(grouped).map(([category, items]) => `
-          <section class="category">
-            <p class="category-title">${escapeHtml(category)}</p>
-            <div class="chips">
-              ${items.map(item => keywordButton(item)).join('')}
-            </div>
-          </section>
-        `).join('');
+        keywordGroups.innerHTML = `
+          <div class="chips" aria-label="キーワード一覧">
+            ${appData.keywords.map((item, index) => keywordButton({ ...item, index })).join('')}
+          </div>
+        `;
   
         keywordGroups.querySelectorAll('.chip').forEach(button => {
           button.addEventListener('click', () => toggleKeyword(Number(button.dataset.index)));
@@ -64,10 +54,10 @@ async function initKeyword() {
       }
   
       function keywordButton(item) {
+        const description = [item.category, item.description].filter(Boolean).join(' / ');
         return `
-          <button type="button" class="chip" data-index="${item.index}">
-            <span class="chip-name">${escapeHtml(item.keyword)}</span>
-            <span class="chip-desc">${escapeHtml(item.description || '')}</span>
+          <button type="button" class="chip" data-index="${item.index}" title="${escapeAttr(description)}" aria-label="${escapeAttr(item.keyword)}を選択">
+            <span class="chip-name">#${escapeHtml(item.keyword)}</span>
           </button>
         `;
       }
@@ -86,7 +76,7 @@ async function initKeyword() {
         count.textContent = `${selected.size}/${appData.selectionLimit}`;
         const selectedItems = getSelectedItems();
         selectedList.innerHTML = selectedItems.map(item => `
-          <span class="selected-pill">${escapeHtml(item.keyword)}</span>
+          <span class="selected-pill">#${escapeHtml(item.keyword)}</span>
         `).join('');
   
         document.querySelectorAll('.chip').forEach(button => {
@@ -138,7 +128,7 @@ async function initKeyword() {
   
       function resultCard(entry, index) {
         const area = entry.area;
-        const style = `style="--accent: ${escapeAttr(area.color || '#334155')}"`;
+        const style = `style="--accent: ${escapeCssToken(area.color || '#334155')}"`;
         return `
           <article class="result-card" ${style}>
             <div class="result-top">
@@ -211,6 +201,10 @@ async function initKeyword() {
       }
   
       function escapeAttr(value) {
+        return escapeHtml(value).replace(/`/g, '&#096;');
+      }
+
+      function escapeCssToken(value) {
         return String(value).replace(/[^#(),.% a-zA-Z0-9-]/g, '');
       }
 }

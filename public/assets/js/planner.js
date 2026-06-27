@@ -12,16 +12,26 @@ async function initPlanner() {
       const bootstrap = { ...metadata, courses };
       const moduleOrder = bootstrap.modules.map((module) => module.code);
       const moduleMap = new Map(bootstrap.modules.map((module) => [module.code, module.name]));
+      const moduleByCode = new Map(bootstrap.modules.map((module) => [module.code, module]));
+      const moduleGroups = normalizeModuleGroups(bootstrap);
+      const moduleGroupMap = new Map();
+      moduleGroups.forEach((group) => {
+        group.modules.forEach((moduleCode) => {
+          moduleGroupMap.set(moduleCode, { code: group.code, name: group.name });
+        });
+      });
       const collator = new Intl.Collator("ja");
       const initialCompletedNames = new Set(
         bootstrap.courses.filter((course) => course.completed).map((course) => course.name)
       );
+      const shareMap = buildShareMap(bootstrap.courses);
+      const sharedState = readSharedStateFromUrl();
   
       const state = {
-        modules: new Set(bootstrap.defaults.modules),
-        semester: bootstrap.defaults.semester,
-        year: bootstrap.defaults.year,
-        completedNames: new Set(initialCompletedNames),
+        modules: sharedState.modules,
+        semester: sharedState.semester,
+        year: sharedState.year,
+        completedNames: sharedState.completedNames,
         completedSearch: "",
       };
   
@@ -57,7 +67,6 @@ async function initPlanner() {
         elements.headerCourses = document.getElementById("headerCourses");
         elements.slotCount = document.getElementById("slotCount");
         elements.conflictCount = document.getElementById("conflictCount");
-        elements.dataSource = document.getElementById("dataSource");
         elements.facultyInfo = document.getElementById("facultyInfo");
       }
   
@@ -145,19 +154,37 @@ async function initPlanner() {
       }
   
       function renderModules() {
-        elements.moduleList.innerHTML = bootstrap.modules
+        elements.moduleList.innerHTML = moduleGroups
           .map(
-            (module) => `
-              <label class="check-row">
-                <input type="checkbox" value="${escapeAttr(module.code)}">
-                <span>
-                  <span class="module-name">${escapeHtml(module.name)}</span>
-                  <span class="module-code">${escapeHtml(module.code)}</span>
-                </span>
-              </label>
+            (group) => `
+              <section class="module-group module-group-${escapeAttr(group.code.toLowerCase())}">
+                <div class="module-group-heading">
+                  <span>${escapeHtml(group.name)}</span>
+                  <small>${group.modules.length}モジュール</small>
+                </div>
+                <div class="module-group-items">
+                  ${group.modules
+                    .map((moduleCode) => moduleByCode.get(moduleCode))
+                    .filter(Boolean)
+                    .map(renderModuleOption)
+                    .join("")}
+                </div>
+              </section>
             `
           )
           .join("");
+      }
+
+      function renderModuleOption(module) {
+        return `
+          <label class="check-row">
+            <input type="checkbox" value="${escapeAttr(module.code)}">
+            <span>
+              <span class="module-name">${escapeHtml(module.name)}</span>
+              <span class="module-code">${escapeHtml(module.code)}</span>
+            </span>
+          </label>
+        `;
       }
   
       function renderCompletedList() {
@@ -204,7 +231,6 @@ async function initPlanner() {
           ${listCard("学びの特徴", info.features)}
           ${listCard("3つの学修コース", info.courses)}
           ${listCard("卒業要件の要点", info.graduation)}
-          ${listCard("出典", info.sources, "wide")}
         `;
       }
   
@@ -257,10 +283,20 @@ async function initPlanner() {
         const countedKeys = new Set();
         const schedule = createEmptySchedule();
         const summaryMap = new Map(
-          bootstrap.modules.map((module) => [
-            module.code,
-            { code: module.code, name: module.name, credits: 0, courses: [] },
-          ])
+          bootstrap.modules.map((module) => {
+            const group = moduleGroupMap.get(module.code) || { code: "", name: "" };
+            return [
+              module.code,
+              {
+                code: module.code,
+                name: module.name,
+                groupCode: group.code,
+                groupName: group.name,
+                credits: 0,
+                courses: [],
+              },
+            ];
+          })
         );
   
         rows.forEach((course) => {
@@ -306,6 +342,13 @@ async function initPlanner() {
         });
   
         const summaries = bootstrap.modules.map((module) => summaryMap.get(module.code));
+        const groupSummaries = moduleGroups.map((group) => {
+          const summariesInGroup = group.modules
+            .map((moduleCode) => summaryMap.get(moduleCode))
+            .filter(Boolean);
+          const credits = summariesInGroup.reduce((sum, item) => sum + item.credits, 0);
+          return { ...group, credits, summaries: summariesInGroup };
+        });
         const totalCredits = summaries.reduce((sum, item) => sum + item.credits, 0);
         const conflicts = collectConflicts(schedule);
   
@@ -313,6 +356,7 @@ async function initPlanner() {
           rows,
           resultRows,
           summaries,
+          groupSummaries,
           schedule,
           totalCredits,
           conflicts,
@@ -348,7 +392,6 @@ async function initPlanner() {
         elements.headerCourses.textContent = plan.resultRows.length;
         elements.slotCount.textContent = plan.rows.length;
         elements.conflictCount.textContent = plan.conflicts.length;
-        elements.dataSource.textContent = bootstrap.dataSource;
       }
   
       function renderAlerts(plan) {
@@ -397,22 +440,35 @@ async function initPlanner() {
       }
   
       function renderSummary(plan) {
-        elements.summaryGrid.innerHTML = plan.summaries
+        elements.summaryGrid.innerHTML = plan.groupSummaries
           .map((summary) => {
-            const courses = summary.courses.length
-              ? summary.courses.join("、")
-              : "対象なし";
             return `
-              <article class="summary-item">
-                <div class="summary-title">
-                  <span>${escapeHtml(summary.code)} ${escapeHtml(summary.name)}</span>
-                  <strong>${summary.credits}</strong>
+              <section class="summary-group summary-group-${escapeAttr(summary.code.toLowerCase())}">
+                <div class="summary-group-heading">
+                  <span>${escapeHtml(summary.name)}</span>
+                  <strong>${summary.credits}単位</strong>
                 </div>
-                <div class="summary-courses">${escapeHtml(courses)}</div>
-              </article>
+                <div class="summary-group-items">
+                  ${summary.summaries.map(renderSummaryItem).join("")}
+                </div>
+              </section>
             `;
           })
           .join("");
+      }
+
+      function renderSummaryItem(summary) {
+        const courses = summary.courses.length ? summary.courses.join("、") : "対象なし";
+
+        return `
+          <article class="summary-item">
+            <div class="summary-title">
+              <span>${escapeHtml(summary.code)} ${escapeHtml(summary.name)}</span>
+              <strong>${summary.credits}</strong>
+            </div>
+            <div class="summary-courses">${escapeHtml(courses)}</div>
+          </article>
+        `;
       }
   
       function renderResults(plan) {
@@ -421,12 +477,12 @@ async function initPlanner() {
               .map(
                 (course) => `
                   <tr>
-                    <td><span class="course-slot">${escapeHtml(course.module)}</span></td>
-                    <td>${escapeHtml(course.name)}</td>
-                    <td>${course.year}年次</td>
-                    <td>${escapeHtml(course.semester)}</td>
-                    <td>${escapeHtml(course.slots.join(" / "))}</td>
-                    <td>${course.credits}</td>
+                    <td data-label="モジュール"><span class="course-slot">${escapeHtml(course.module)}</span></td>
+                    <td data-label="科目名">${escapeHtml(course.name)}</td>
+                    <td data-label="年次">${course.year}年次</td>
+                    <td data-label="学期">${escapeHtml(course.semester)}</td>
+                    <td data-label="開講枠">${escapeHtml(course.slots.join(" / "))}</td>
+                    <td data-label="単位">${course.credits}</td>
                   </tr>
                 `
               )
@@ -473,6 +529,33 @@ async function initPlanner() {
             return collator.compare(a.name, b.name);
           });
       }
+
+      function normalizeModuleGroups(data) {
+        const groups = Array.isArray(data.moduleGroups) ? data.moduleGroups : [];
+        if (groups.length) {
+          return groups
+            .map((group) => ({
+              code: group.code,
+              name: group.name,
+              modules: group.modules.filter((moduleCode) => moduleMap.has(moduleCode)),
+            }))
+            .filter((group) => group.modules.length);
+        }
+
+        const fallbackGroups = new Map();
+        data.modules.forEach((module) => {
+          const groupCode = module.group || "その他";
+          if (!fallbackGroups.has(groupCode)) {
+            fallbackGroups.set(groupCode, {
+              code: groupCode,
+              name: groupCode === "A" || groupCode === "B" ? `${groupCode}群` : groupCode,
+              modules: [],
+            });
+          }
+          fallbackGroups.get(groupCode).modules.push(module.code);
+        });
+        return Array.from(fallbackGroups.values());
+      }
   
       function updateModuleToggleText() {
         elements.toggleAllModules.textContent =
@@ -490,38 +573,51 @@ async function initPlanner() {
       async function copyPlan() {
         if (!lastPlan) return;
   
-        const text = buildCopyText(lastPlan);
-        try {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(text);
-          } else {
-            fallbackCopy(text);
-          }
-          flashButton(elements.copyButton, "コピー済み");
-        } catch (error) {
-          fallbackCopy(text);
-          flashButton(elements.copyButton, "コピー済み");
+        const url = buildShareUrl();
+        const copied = await copyText(url);
+
+        if (copied) {
+          flashButton(elements.copyButton, "URLコピー済み");
+        } else {
+          flashButton(elements.copyButton, "コピー失敗");
         }
       }
-  
-      function buildCopyText(plan) {
-        const conditions = [
-          `モジュール: ${Array.from(state.modules).join(", ") || "未選択"}`,
-          `学期: ${state.semester}`,
-          `年次: ${state.year}年次`,
-          `総単位数: ${plan.totalCredits}`,
-        ];
-        const rows = plan.resultRows.map(
-          (course) =>
-            `${course.module}\t${course.name}\t${course.year}年次\t${course.semester}\t${course.slots.join(" / ")}\t${course.credits}`
-        );
-        return [
-          "履修モジュールプランナー",
-          conditions.join("\n"),
-          "",
-          "モジュール\t科目名\t年次\t学期\t開講枠\t単位",
-          ...rows,
-        ].join("\n");
+
+      async function copyText(text) {
+        if (
+          typeof navigator !== "undefined" &&
+          navigator.clipboard &&
+          navigator.clipboard.writeText
+        ) {
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch (error) {
+            console.warn("Clipboard API copy failed. Falling back to textarea copy.", error);
+          }
+        }
+
+        return fallbackCopy(text);
+      }
+
+      function buildShareUrl() {
+        const url = new URL(window.location.href);
+        url.search = "";
+        url.hash = "";
+
+        url.searchParams.set("m", Array.from(state.modules).join(","));
+        url.searchParams.set("s", state.semester);
+        url.searchParams.set("y", String(state.year));
+
+        const completedIds = Array.from(state.completedNames)
+          .map((name) => shareMap.idByName.get(name))
+          .filter(Boolean)
+          .sort();
+        if (completedIds.length) {
+          url.searchParams.set("done", completedIds.join(","));
+        }
+
+        return url.toString();
       }
   
       function fallbackCopy(text) {
@@ -529,11 +625,25 @@ async function initPlanner() {
         textarea.value = text;
         textarea.setAttribute("readonly", "");
         textarea.style.position = "fixed";
-        textarea.style.left = "-9999px";
+        textarea.style.top = "0";
+        textarea.style.left = "0";
+        textarea.style.width = "1px";
+        textarea.style.height = "1px";
+        textarea.style.opacity = "0.01";
         document.body.appendChild(textarea);
+        textarea.focus();
         textarea.select();
-        document.execCommand("copy");
+        textarea.setSelectionRange(0, textarea.value.length);
+
+        let copied = false;
+        try {
+          copied = document.execCommand("copy");
+        } catch (error) {
+          copied = false;
+        }
+
         textarea.remove();
+        return copied;
       }
   
       function flashButton(button, label) {
@@ -546,6 +656,55 @@ async function initPlanner() {
   
       function courseKey(course) {
         return [course.module, course.name, course.semester, course.year].join("|");
+      }
+
+      function readSharedStateFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const moduleParam = params.has("m")
+          ? params.get("m")
+          : params.has("modules")
+            ? params.get("modules")
+            : null;
+        const modules = moduleParam === null
+          ? new Set(bootstrap.defaults.modules)
+          : new Set(
+              moduleParam
+                .split(",")
+                .map((code) => code.trim())
+                .filter((code) => moduleMap.has(code))
+            );
+
+        const semesterParam = params.get("s") || params.get("semester");
+        const semester = ["春", "秋"].includes(semesterParam)
+          ? semesterParam
+          : bootstrap.defaults.semester;
+
+        const yearParam = Number(params.get("y") || params.get("year"));
+        const year = [2, 3].includes(yearParam) ? yearParam : bootstrap.defaults.year;
+
+        const completedNames = params.has("done")
+          ? new Set(
+              params
+                .get("done")
+                .split(",")
+                .map((id) => shareMap.nameById.get(id.trim()))
+                .filter(Boolean)
+            )
+          : new Set(initialCompletedNames);
+
+        return { modules, semester, year, completedNames };
+      }
+
+      function buildShareMap(courses) {
+        const idByName = new Map();
+        const nameById = new Map();
+        courses.forEach((course) => {
+          if (!idByName.has(course.name)) {
+            idByName.set(course.name, course.id);
+          }
+          nameById.set(course.id, course.name);
+        });
+        return { idByName, nameById };
       }
   
       function escapeHtml(value) {
