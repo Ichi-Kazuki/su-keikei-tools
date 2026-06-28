@@ -16,7 +16,16 @@ async function initDiagnosis() {
   
       function showOnly(screenId) {
         screens.forEach(function (id) { byId(id).classList.toggle('hidden', id !== screenId); });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        scrollToScreenTop(screenId);
+      }
+
+      function scrollToScreenTop(screenId) {
+        const target = byId(screenId);
+        const currentY = window.pageYOffset || 0;
+        const top = target && typeof target.getBoundingClientRect === 'function'
+          ? target.getBoundingClientRect().top + currentY - 16
+          : 0;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
       }
   
       function startQuiz() {
@@ -25,6 +34,7 @@ async function initDiagnosis() {
         state.resultIds = [];
         showOnly('quiz-screen');
         renderQuestion();
+        scrollToScreenTop('quiz-screen');
       }
   
       function renderQuestion() {
@@ -41,7 +51,10 @@ async function initDiagnosis() {
           const selected = question.type === 'multi'
             ? ids.some(function (id) { return answered.indexOf(id) > -1; })
             : answered.join(',') === choice[0];
-          return '<button class="choice" type="button" data-value="' + choice[0] + '" aria-pressed="' + selected + '"><strong>' + choice[1] + '</strong><small>' + choice[2] + '</small></button>';
+          return '<button class="choice" type="button" data-value="' + choice[0] + '" aria-pressed="' + selected + '">' +
+            '<span class="choice-copy"><strong>' + escapeHtml(choice[1]) + '</strong><small>' + escapeHtml(choice[2]) + '</small></span>' +
+            '<span class="choice-arrow" aria-hidden="true">→</span>' +
+          '</button>';
         }).join('');
   
         byId('question-card').innerHTML =
@@ -85,6 +98,7 @@ async function initDiagnosis() {
         if (state.current < questions.length - 1) {
           state.current += 1;
           renderQuestion();
+          scrollToScreenTop('quiz-screen');
         } else {
           showResult();
         }
@@ -108,20 +122,18 @@ async function initDiagnosis() {
   
       function makeCard(id, isPrimary) {
         const theme = themes[id];
-        return '<article class="result-card ' + (isPrimary ? 'primary' : '') + '">' +
-          '<span class="tag">' + (isPrimary ? 'あなたのメインテーマ' : 'もう一つの可能性') + '</span>' +
-          '<h3>' + theme.label + '</h3>' +
-          '<p><strong>' + theme.route + '</strong></p>' +
-          '<p>' + theme.lead + '</p>' +
-          '<ul>' + theme.points.map(function (point) { return '<li>' + point + '</li>'; }).join('') + '</ul>' +
-          '</article>';
+        const consultationQuestions = theme.openCampusQuestions || (theme.staffPrompt ? [theme.staffPrompt] : []);
+        const modules = uniqueItems((theme.courseLinkedModules || []).concat(theme.relatedModules || []));
+        if (isPrimary) return makePrimaryResultCard(theme, consultationQuestions, modules);
+        return makeSecondaryResultCard(theme, modules);
       }
   
       function showResult() {
         state.resultIds = getRankedThemes().slice(0, 2);
         const primary = themes[state.resultIds[0]];
-        byId('result-title').textContent = '「' + primary.shortLabel + '」から、未来をひらく。';
-        byId('result-lead').textContent = primary.lead + ' そして、' + themes[state.resultIds[1]].shortLabel + 'の視点を組み合わせると、あなただけの学び方がさらに広がります。';
+        const secondary = themes[state.resultIds[1]];
+        byId('result-title').innerHTML = '「' + escapeHtml(primary.shortLabel) + '」から、<br class="mobile-result-title-break">未来をひらく。';
+        byId('result-lead').textContent = 'この結果は、学び方を考えるためのヒントです。「' + primary.shortLabel + '」に関心が向きやすいかもしれません。' + secondary.shortLabel + 'の視点も組み合わせると、学部説明や在学生相談で聞きたいことが見つけやすくなります。';
         byId('result-cards').innerHTML = makeCard(state.resultIds[0], true) + makeCard(state.resultIds[1], false);
         showOnly('result-screen');
       }
@@ -132,7 +144,7 @@ async function initDiagnosis() {
         showOnly('welcome-screen');
       });
       byId('next-button').addEventListener('click', nextQuestion);
-      byId('back-button').addEventListener('click', function () { state.current -= 1; renderQuestion(); });
+      byId('back-button').addEventListener('click', function () { state.current -= 1; renderQuestion(); scrollToScreenTop('quiz-screen'); });
       byId('restart-button').addEventListener('click', startQuiz);
       byId('print-button').addEventListener('click', function () { window.print(); });
 }
@@ -141,6 +153,65 @@ async function fetchJson(path) {
   const response = await fetch(path, { cache: 'no-cache' });
   if (!response.ok) throw new Error(path + ' を読み込めませんでした');
   return response.json();
+}
+
+function makeListSection(title, items) {
+  if (!Array.isArray(items) || !items.length) return '';
+  return '<p><strong>' + escapeHtml(title) + '</strong></p>' +
+    '<ul>' + items.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>';
+}
+
+function makePrimaryResultCard(theme, consultationQuestions, modules) {
+  return '<article class="result-card result-card-primary">' +
+    '<div class="result-card-heading">' +
+      '<span class="tag">あなたに近い学びタイプ</span>' +
+      '<h3>' + escapeHtml(theme.label) + '</h3>' +
+      '<p>' + escapeHtml(theme.lead) + '</p>' +
+      '<div class="result-routing-grid">' +
+        '<p><strong>関連しそうなコース</strong><span>' + escapeHtml(theme.route) + '</span></p>' +
+        '<p><strong>関連しそうなモジュール</strong><span>' + escapeHtml(modules.join('、')) + '</span></p>' +
+      '</div>' +
+    '</div>' +
+    '<div class="result-detail-grid">' +
+      makeInsightCard('あなたに合う学びの特徴', theme.points || [], 'green') +
+      makeInsightCard('関心に近いテーマ', theme.learningThemes || [], 'orange') +
+      makeInsightCard('授業やゼミのイメージ', theme.relatedCourses || [], 'blue') +
+      makeInsightCard('オープンキャンパスで聞くとよいこと', consultationQuestions.concat(theme.consultationMemo ? ['相談メモ: ' + theme.consultationMemo] : []), 'purple') +
+    '</div>' +
+  '</article>';
+}
+
+function makeSecondaryResultCard(theme, modules) {
+  return '<article class="result-card result-card-secondary">' +
+    '<span class="tag">組み合わせると広がる視点</span>' +
+    '<h3>' + escapeHtml(theme.label) + '</h3>' +
+    '<p>' + escapeHtml(theme.lead) + '</p>' +
+    '<div class="secondary-result-grid">' +
+      '<p><strong>関連しそうなコース</strong><span>' + escapeHtml(theme.route) + '</span></p>' +
+      '<p><strong>関連しそうなモジュール</strong><span>' + escapeHtml(modules.join('、')) + '</span></p>' +
+    '</div>' +
+  '</article>';
+}
+
+function makeInsightCard(title, items, tone) {
+  if (!Array.isArray(items) || !items.length) return '';
+  return '<section class="insight-card insight-' + tone + '">' +
+    '<div class="insight-title"><h4>' + escapeHtml(title) + '</h4></div>' +
+    '<ul>' + items.map(function (item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>' +
+  '</section>';
+}
+
+function uniqueItems(items) {
+  return Array.from(new Set(items.filter(Boolean)));
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 function showLoadError(error) {

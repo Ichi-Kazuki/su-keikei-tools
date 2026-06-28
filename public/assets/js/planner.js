@@ -86,11 +86,7 @@ async function initPlanner() {
         });
   
         elements.toggleAllModules.addEventListener("click", () => {
-          if (state.modules.size === bootstrap.modules.length) {
-            state.modules.clear();
-          } else {
-            state.modules = new Set(moduleOrder);
-          }
+          state.modules.clear();
           syncControls();
           updatePlan();
         });
@@ -177,11 +173,11 @@ async function initPlanner() {
 
       function renderModuleOption(module) {
         return `
-          <label class="check-row">
+          <label class="check-row ${moduleGroupClass(module.code)}">
             <input type="checkbox" value="${escapeAttr(module.code)}">
             <span>
               <span class="module-name">${escapeHtml(module.name)}</span>
-              <span class="module-code">${escapeHtml(module.code)}</span>
+              ${renderModuleBadge(module.code, "module-code")}
             </span>
           </label>
         `;
@@ -203,7 +199,10 @@ async function initPlanner() {
                     <input type="checkbox" data-name="${escapeAttr(item.name)}" ${checked}>
                     <span>
                       <span class="completed-name">${escapeHtml(item.name)}</span>
-                      <span class="completed-meta">${escapeHtml(item.meta)}</span>
+                      <span class="completed-meta">
+                        ${item.modules.map((moduleCode) => renderModuleBadge(moduleCode, "completed-module-badge")).join("")}
+                        <span>${escapeHtml(item.detailMeta)}</span>
+                      </span>
                     </span>
                   </label>
                 `;
@@ -278,6 +277,9 @@ async function initPlanner() {
             !state.completedNames.has(course.name)
           );
         });
+        const completedSummaryRows = bootstrap.courses.filter((course) => {
+          return state.completedNames.has(course.name);
+        });
   
         const uniqueMap = new Map();
         const countedKeys = new Set();
@@ -298,6 +300,16 @@ async function initPlanner() {
             ];
           })
         );
+
+        function addSummaryCredit(course, completed = false) {
+          const key = courseKey(course);
+          if (Number(course.credits || 0) <= 0 || countedKeys.has(key)) return;
+
+          countedKeys.add(key);
+          const summary = summaryMap.get(course.module);
+          summary.credits += Number(course.credits || 0);
+          summary.courses.push(completed ? `${course.name}（履修済み）` : course.name);
+        }
   
         rows.forEach((course) => {
           const key = courseKey(course);
@@ -317,12 +329,7 @@ async function initPlanner() {
   
           uniqueMap.get(key).slots.push(`${course.day}${course.period}限`);
   
-          if (Number(course.credits || 0) > 0 && !countedKeys.has(key)) {
-            countedKeys.add(key);
-            const summary = summaryMap.get(course.module);
-            summary.credits += Number(course.credits || 0);
-            summary.courses.push(course.name);
-          }
+          addSummaryCredit(course);
   
           if (schedule[course.day] && schedule[course.day][course.period]) {
             schedule[course.day][course.period].push({
@@ -334,6 +341,7 @@ async function initPlanner() {
             });
           }
         });
+        completedSummaryRows.forEach((course) => addSummaryCredit(course, true));
   
         const resultRows = Array.from(uniqueMap.values()).sort((a, b) => {
           const moduleDiff = moduleOrder.indexOf(a.module) - moduleOrder.indexOf(b.module);
@@ -433,8 +441,8 @@ async function initPlanner() {
   
       function renderCoursePill(course) {
         return `
-          <span class="course-pill">
-            <span class="module-badge">${escapeHtml(course.module)}</span>${escapeHtml(course.name)}
+          <span class="course-pill ${moduleGroupClass(course.module)}">
+            ${renderModuleBadge(course.module, "module-badge")}${escapeHtml(course.name)}
           </span>
         `;
       }
@@ -443,32 +451,15 @@ async function initPlanner() {
         elements.summaryGrid.innerHTML = plan.groupSummaries
           .map((summary) => {
             return `
-              <section class="summary-group summary-group-${escapeAttr(summary.code.toLowerCase())}">
-                <div class="summary-group-heading">
+              <article class="summary-row summary-group-${escapeAttr(summary.code.toLowerCase())}">
+                <span>
                   <span>${escapeHtml(summary.name)}</span>
-                  <strong>${summary.credits}単位</strong>
-                </div>
-                <div class="summary-group-items">
-                  ${summary.summaries.map(renderSummaryItem).join("")}
-                </div>
-              </section>
+                </span>
+                <strong>${summary.credits}<small>単位</small></strong>
+              </article>
             `;
           })
           .join("");
-      }
-
-      function renderSummaryItem(summary) {
-        const courses = summary.courses.length ? summary.courses.join("、") : "対象なし";
-
-        return `
-          <article class="summary-item">
-            <div class="summary-title">
-              <span>${escapeHtml(summary.code)} ${escapeHtml(summary.name)}</span>
-              <strong>${summary.credits}</strong>
-            </div>
-            <div class="summary-courses">${escapeHtml(courses)}</div>
-          </article>
-        `;
       }
   
       function renderResults(plan) {
@@ -477,8 +468,19 @@ async function initPlanner() {
               .map(
                 (course) => `
                   <tr>
-                    <td data-label="モジュール"><span class="course-slot">${escapeHtml(course.module)}</span></td>
-                    <td data-label="科目名">${escapeHtml(course.name)}</td>
+                    <td data-label="モジュール">${renderModuleBadge(course.module, "course-slot")}</td>
+                    <td data-label="科目名" class="result-course-cell">
+                      <span class="result-course-name">${escapeHtml(course.name)}</span>
+                      <span class="result-mobile-meta">
+                        ${renderModuleBadge(course.module, "course-slot")}
+                        <span>${course.year}年</span>
+                        <span>${escapeHtml(course.semester)}</span>
+                      </span>
+                      <span class="result-mobile-facts">
+                        <span><b>開講枠</b>${escapeHtml(course.slots.join(" / "))}</span>
+                        <span><b>単位</b>${course.credits}単位</span>
+                      </span>
+                    </td>
                     <td data-label="年次">${course.year}年次</td>
                     <td data-label="学期">${escapeHtml(course.semester)}</td>
                     <td data-label="開講枠">${escapeHtml(course.slots.join(" / "))}</td>
@@ -515,9 +517,12 @@ async function initPlanner() {
             const years = Array.from(item.years).sort((a, b) => a - b).map((year) => `${year}年`);
             const semesters = Array.from(item.semesters).sort((a, b) => (a === "春" ? -1 : 1));
             const meta = `${modules.join("/")} ${years.join("/")} ${semesters.join("/")}`;
+            const detailMeta = `${years.join("/")} ${semesters.join("/")}`;
             return {
               ...item,
+              modules,
               meta,
+              detailMeta,
               firstModule: modules[0],
               searchText: `${item.name} ${meta}`.toLowerCase(),
             };
@@ -556,10 +561,21 @@ async function initPlanner() {
         });
         return Array.from(fallbackGroups.values());
       }
+
+      function renderModuleBadge(moduleCode, className) {
+        return `<span class="${escapeAttr(className)} ${escapeAttr(moduleGroupClass(moduleCode))}">${escapeHtml(moduleCode)}</span>`;
+      }
+
+      function moduleGroupClass(moduleCode) {
+        const group = moduleGroupMap.get(moduleCode);
+        const groupCode = String(group?.code || "other")
+          .toLowerCase()
+          .replace(/[^a-z0-9_-]/g, "");
+        return `module-family-${groupCode || "other"}`;
+      }
   
       function updateModuleToggleText() {
-        elements.toggleAllModules.textContent =
-          state.modules.size === bootstrap.modules.length ? "すべて解除" : "すべて選択";
+        elements.toggleAllModules.textContent = "解除";
       }
   
       function activateTab(tabName) {

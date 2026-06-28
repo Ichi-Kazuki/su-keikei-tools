@@ -132,20 +132,27 @@ async function initKeyword() {
         return `
           <article class="result-card" ${style}>
             <div class="result-top">
-              <div>
+              <div class="result-title-row">
                 <span class="rank">${index + 1}</span>
-                <h3 class="area-name">${escapeHtml(area.name)}</h3>
+                <div>
+                  <h3 class="area-name">${escapeHtml(area.name)}</h3>
+                  <p class="subtitle">${escapeHtml(area.subtitle || '')}</p>
+                </div>
               </div>
               <span class="match">近さ ${entry.match}%</span>
             </div>
-            <p class="subtitle">${escapeHtml(area.subtitle || '')}</p>
             <p class="description">${escapeHtml(area.description || '')}</p>
-            <p class="question">${escapeHtml(area.question || '')}</p>
+            <div class="question">
+              <span>関連する問い</span>
+              <p>${escapeHtml(area.question || '')}</p>
+            </div>
             <div class="meta">
-              <div><strong>関連しやすいコース：</strong>${escapeHtml(area.course || '')}</div>
-              <div><strong>相談で聞くこと：</strong>${escapeHtml(area.advice || '')}</div>
-              <div>
-                <strong>関連する授業：</strong>
+              <div class="meta-row">
+                <strong>近い学びの領域</strong>
+                <span>${escapeHtml(area.course || '')}</span>
+              </div>
+              <div class="meta-row">
+                <strong>授業例</strong>
                 <ul class="lesson-list">
                   ${entry.lessons.map(lesson => `
                     <li>
@@ -154,6 +161,10 @@ async function initKeyword() {
                     </li>
                   `).join('')}
                 </ul>
+              </div>
+              <div class="meta-row">
+                <strong>相談で聞くとよいこと</strong>
+                <span>${escapeHtml(area.advice || '')}</span>
               </div>
             </div>
           </article>
