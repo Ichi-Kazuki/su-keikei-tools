@@ -3219,6 +3219,15 @@ body.tool-planner .metric-icon {
     font-size: 14px;
     font-weight: 900;
   }
+body.tool-planner .metric-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
 body.tool-planner .metric-card-danger .metric-icon {
     background: var(--danger-bg);
     color: var(--danger);
