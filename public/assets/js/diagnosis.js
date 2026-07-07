@@ -47,10 +47,7 @@ async function initDiagnosis() {
         byId('next-button').textContent = state.current === questions.length - 1 ? '結果を見る →' : '次へ →';
   
         const choices = question.choices.map(function (choice) {
-          const ids = choice[0].split(',');
-          const selected = question.type === 'multi'
-            ? ids.some(function (id) { return answered.indexOf(id) > -1; })
-            : answered.join(',') === choice[0];
+          const selected = answered.indexOf(choice[0]) > -1;
           return '<button class="choice" type="button" data-value="' + choice[0] + '" aria-pressed="' + selected + '">' +
             '<span class="choice-copy"><strong>' + escapeHtml(choice[1]) + '</strong><small>' + escapeHtml(choice[2]) + '</small></span>' +
             '<span class="choice-arrow" aria-hidden="true">→</span>' +
@@ -70,19 +67,19 @@ async function initDiagnosis() {
       }
   
       function selectChoice(question, value) {
+        const selected = state.answers[question.id] || [];
+        const max = getQuestionMax(question);
         if (question.type === 'single') {
-          state.answers[question.id] = value.split(',');
+          state.answers[question.id] = [value];
         } else {
-          const selected = state.answers[question.id] || [];
-          const optionIds = value.split(',');
-          const isSelected = optionIds.some(function (id) { return selected.indexOf(id) > -1; });
+          const isSelected = selected.indexOf(value) > -1;
           if (isSelected) {
-            state.answers[question.id] = selected.filter(function (id) { return optionIds.indexOf(id) === -1; });
-          } else if (selected.length >= question.max) {
-            byId('selection-hint').textContent = '最大' + question.max + 'つまで選べます。選択を外してから選び直してください。';
+            state.answers[question.id] = selected.filter(function (choiceValue) { return choiceValue !== value; });
+          } else if (selected.length >= max) {
+            byId('selection-hint').textContent = '最大' + max + 'つまで選べます。選択を外してから選び直してください。';
             return;
           } else {
-            state.answers[question.id] = selected.concat(optionIds);
+            state.answers[question.id] = selected.concat(value);
           }
         }
         renderQuestion();
@@ -108,9 +105,13 @@ async function initDiagnosis() {
         const score = {};
         Object.keys(themes).forEach(function (id) { score[id] = 0; });
         questions.forEach(function (question) {
-          (state.answers[question.id] || []).forEach(function (id) { score[id] += question.id === 'interest' ? 3 : 1; });
+          getThemeIds(state.answers[question.id] || []).forEach(function (id) {
+            if (Object.prototype.hasOwnProperty.call(score, id)) {
+              score[id] += question.id === 'interest' ? 3 : 1;
+            }
+          });
         });
-        const interestOrder = state.answers.interest || [];
+        const interestOrder = getThemeIds(state.answers.interest || []);
         return Object.keys(score).sort(function (a, b) {
           if (score[b] !== score[a]) return score[b] - score[a];
           const aInterest = interestOrder.indexOf(a);
@@ -147,6 +148,10 @@ async function initDiagnosis() {
       byId('back-button').addEventListener('click', function () { state.current -= 1; renderQuestion(); scrollToScreenTop('quiz-screen'); });
       byId('restart-button').addEventListener('click', startQuiz);
       byId('print-button').addEventListener('click', function () { window.print(); });
+
+      function getQuestionMax(question) {
+        return question.type === 'single' ? 1 : Number(question.max || 1);
+      }
 }
 
 async function fetchJson(path) {
@@ -203,6 +208,17 @@ function makeInsightCard(title, items, tone) {
 
 function uniqueItems(items) {
   return Array.from(new Set(items.filter(Boolean)));
+}
+
+function getThemeIds(answerValues) {
+  const ids = [];
+  answerValues.forEach(function (value) {
+    String(value).split(',').forEach(function (id) {
+      const normalized = id.trim();
+      if (normalized) ids.push(normalized);
+    });
+  });
+  return ids;
 }
 
 function escapeHtml(value) {

@@ -261,9 +261,10 @@
     },
     {
       "id": "scene",
-      "type": "single",
+      "type": "multi",
+      "max": 2,
       "title": "どんな場面で「力になりたい」と思う？",
-      "helper": "直感で1つ選んでください。",
+      "helper": "直感で最大2つまで選んでください。",
       "choices": [
         [
           "business,leadership",
@@ -289,9 +290,10 @@
     },
     {
       "id": "method",
-      "type": "single",
+      "type": "multi",
+      "max": 2,
       "title": "学び方として、わくわくするのは？",
-      "helper": "今の得意・不得意ではなく、これからやってみたい方を選んでください。",
+      "helper": "今の得意・不得意ではなく、これからやってみたい学び方を最大2つまで選んでください。",
       "choices": [
         [
           "data,finance",
@@ -317,9 +319,10 @@
     },
     {
       "id": "future",
-      "type": "single",
+      "type": "multi",
+      "max": 2,
       "title": "将来、どんな自分になっていたらうれしい？",
-      "helper": "職業が決まっていなくても大丈夫です。",
+      "helper": "職業が決まっていなくても大丈夫です。近いものを最大2つまで選んでください。",
       "choices": [
         [
           "global",
@@ -355,9 +358,10 @@
     },
     {
       "id": "value",
-      "type": "single",
+      "type": "multi",
+      "max": 2,
       "title": "大切にしたい価値観に近いのは？",
-      "helper": "正解はありません。今の気持ちに近いものを選んでください。",
+      "helper": "正解はありません。今の気持ちに近いものを最大2つまで選んでください。",
       "choices": [
         [
           "social,leadership",
@@ -383,9 +387,10 @@
     },
     {
       "id": "challenge",
-      "type": "single",
+      "type": "multi",
+      "max": 2,
       "title": "大学で、最初に挑戦してみたいことは？",
-      "helper": "まだ迷っている人は、今いちばん体験してみたい学び方に近いものを選んでください。",
+      "helper": "まだ迷っている人は、今いちばん体験してみたい学び方に近いものを最大2つまで選んでください。",
       "choices": [
         [
           "leadership,business",

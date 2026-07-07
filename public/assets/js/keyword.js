@@ -135,11 +135,11 @@ async function initKeyword() {
               <div class="result-title-row">
                 <span class="rank">${index + 1}</span>
                 <div>
-                  <h3 class="area-name">${escapeHtml(area.name)}</h3>
+                  <h3 class="area-name"><span class="module-prefix">モジュール：</span>${escapeHtml(area.name)}</h3>
                   <p class="subtitle">${escapeHtml(area.subtitle || '')}</p>
                 </div>
               </div>
-              <span class="match">近さ ${entry.match}%</span>
+              <span class="match">マッチ度 ${entry.match}%</span>
             </div>
             <p class="description">${escapeHtml(area.description || '')}</p>
             <div class="question">
