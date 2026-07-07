@@ -1,4 +1,4 @@
-
+/* Home page */
 body.tool-home {
     --home-navy: #07194a;
     --home-blue: #0968df;
@@ -113,8 +113,6 @@ body.tool-home .home-hero::before {
     position: absolute;
     pointer-events: none;
     z-index: -1;
-  }
-body.tool-home .home-hero::before {
     width: 128px;
     height: 128px;
     left: -56px;
@@ -558,9 +556,9 @@ body.tool-home .home-message {
       text-align: center;
       padding: 20px;
     }
-  }
+}
 
-
+/* Shared tool page header */
 body.tool-keyword .tool-page-header,
 body.tool-diagnosis .tool-page-header,
 body.tool-planner .tool-page-header {
@@ -661,9 +659,9 @@ body.tool-diagnosis .tool-page-header,
 body.tool-planner .tool-page-header {
       display: none !important;
     }
-  }
+}
 
-
+/* Keyword diagnosis base styles */
 body.tool-keyword {
       --ink: #172033;
       --muted: #64748b;
@@ -1295,7 +1293,7 @@ body.tool-keyword .area-name {
 body.tool-keyword .module-prefix {
       display: block;
       color: var(--keyword-blue);
-      font-size: .68em;
+      font-size: .62em;
       font-weight: 900;
       margin: 0 0 3px;
     }
@@ -1528,7 +1526,7 @@ body.tool-keyword .result-card {
     
 }
 
-
+/* Diagnosis base styles */
 body.tool-diagnosis {
     --navy: #0b2d5c;
     --blue: #175caa;
@@ -1543,8 +1541,7 @@ body.tool-diagnosis {
     --shadow: 0 16px 40px rgba(23, 46, 81, .12);
   }
 body.tool-diagnosis * { box-sizing: border-box; }
-body.tool-diagnosis { scroll-behavior: smooth; }
-body.tool-diagnosis { margin: 0; background: var(--cream); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif; line-height: 1.7; }
+body.tool-diagnosis { scroll-behavior: smooth; margin: 0; background: var(--cream); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif; line-height: 1.7; }
 body.tool-diagnosis button,
 body.tool-diagnosis input { font: inherit; }
 body.tool-diagnosis button { cursor: pointer; }
@@ -2404,7 +2401,7 @@ body.tool-diagnosis .result-card,
 body.tool-diagnosis .insight-card { box-shadow: none; }
 }
 
-
+/* Planner base styles */
 body.tool-planner {
     --bg: #f5f6f1;
     --surface: #ffffff;
@@ -2424,14 +2421,11 @@ body.tool-planner * {
   }
 body.tool-planner {
     min-height: 100%;
+    margin: 0;
     background: var(--bg);
     color: var(--ink);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif;
     line-height: 1.5;
-  }
-body.tool-planner {
-    min-height: 100%;
-    margin: 0;
   }
 body.tool-planner button,
 body.tool-planner input {
