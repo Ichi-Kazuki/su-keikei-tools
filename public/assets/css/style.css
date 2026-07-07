@@ -1292,6 +1292,13 @@ body.tool-keyword .area-name {
       font-weight: 900;
       line-height: 1.25;
     }
+body.tool-keyword .module-prefix {
+      display: block;
+      color: var(--keyword-blue);
+      font-size: .68em;
+      font-weight: 900;
+      margin: 0 0 3px;
+    }
 body.tool-keyword .subtitle {
       margin: 5px 0 0;
       color: var(--keyword-blue);
@@ -3826,6 +3833,10 @@ body.tool-planner .metric-icon {
       width: 34px;
       height: 34px;
       font-size: 12px;
+    }
+body.tool-planner .metric-icon svg {
+      width: 19px;
+      height: 19px;
     }
 body.tool-planner .metric-card strong,
 body.tool-planner .total-box strong {
