@@ -4031,12 +4031,8 @@ body.tool-planner .total-box {
 
   body.tool-keyword .area-name,
   body.tool-keyword .subtitle,
-  body.tool-keyword .description,
-  body.tool-keyword .question p,
   body.tool-keyword .meta-row span,
-  body.tool-keyword .lesson-name,
-  body.tool-keyword .lesson-detail {
-    word-break: keep-all;
+  body.tool-keyword .lesson-name{
     overflow-wrap: break-word;
     line-break: strict;
   }
