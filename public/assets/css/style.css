@@ -4109,7 +4109,7 @@ body.tool-keyword .result-card {
 }
 @media (max-width: 760px) {
   body.tool-keyword .subtitle {
-    font-size: 22px;
+    font-size: 14px;
   }
 }
 /* マッチ度を結果カード右上に固定 */
