@@ -4061,3 +4061,38 @@ body.tool-keyword .result-card {
   border: 1px solid #bcd4f4;
   border-left: 1px solid #bcd4f4;
 }
+/* スマホ時のヘッダー下余白を調整 */
+@media (max-width: 760px) {
+  body.tool-keyword .tool-page-header,
+  body.tool-diagnosis .tool-page-header,
+  body.tool-planner .tool-page-header {
+    padding: 16px 0 6px;
+    gap: 8px;
+  }
+
+  body.tool-keyword .tool-page-nav,
+  body.tool-diagnosis .tool-page-nav,
+  body.tool-planner .tool-page-nav {
+    padding-bottom: 0;
+  }
+
+  body.tool-keyword .tool-page-nav a,
+  body.tool-diagnosis .tool-page-nav a,
+  body.tool-planner .tool-page-nav a {
+    padding: 4px 0;
+  }
+
+  body.tool-keyword .app {
+    padding-top: 14px;
+  }
+
+  body.tool-keyword .topbar {
+    margin-bottom: 16px;
+  }
+
+  body.tool-diagnosis .hero {
+    min-height: auto;
+    justify-content: flex-start;
+    padding: 28px 0 64px;
+  }
+}
