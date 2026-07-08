@@ -4023,3 +4023,41 @@ body.tool-planner .total-box {
 
   
 }
+/* スマホ表示で日本語が不自然に1文字単位で割れるのを防ぐ */
+@media (max-width: 760px) {
+  body.tool-keyword .result-card {
+    overflow-wrap: normal;
+  }
+
+  body.tool-keyword .area-name,
+  body.tool-keyword .subtitle,
+  body.tool-keyword .description,
+  body.tool-keyword .question p,
+  body.tool-keyword .meta-row span,
+  body.tool-keyword .lesson-name,
+  body.tool-keyword .lesson-detail {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    line-break: strict;
+  }
+
+  body.tool-keyword .subtitle {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  body.tool-keyword .description {
+    line-height: 1.9;
+  }
+}
+@media (max-width: 760px) {
+  body.tool-keyword .area-name {
+    font-size: clamp(26px, 7vw, 34px);
+    line-height: 1.22;
+  }
+}
+/* 結果カードの左端が切れて見えるのを防ぐ */
+body.tool-keyword .result-card {
+  border: 1px solid #bcd4f4;
+  border-left: 1px solid #bcd4f4;
+}
