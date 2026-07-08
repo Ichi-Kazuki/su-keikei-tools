@@ -4092,3 +4092,21 @@ body.tool-keyword .result-card {
     padding: 28px 0 64px;
   }
 }
+/* PC表示：マッチ度をカード左上に配置 */
+@media (min-width: 761px) {
+  body.tool-keyword .result-card {
+    position: relative;
+    padding-top: 64px;
+  }
+
+  body.tool-keyword .match {
+    position: absolute;
+    top: 22px;
+    left: 22px;
+    margin: 0;
+  }
+
+  body.tool-keyword .result-top {
+    justify-content: flex-start;
+  }
+}
