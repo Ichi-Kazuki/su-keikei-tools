@@ -4092,4 +4092,55 @@ body.tool-keyword .result-card {
     padding: 28px 0 64px;
   }
 }
+/* スマホでモジュール説明の折り返しを自然にする */
+@media (max-width: 760px) {
+  body.tool-keyword .subtitle {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding-right: 0;
+    font-size: 24px;
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+}
+@media (max-width: 760px) {
+  body.tool-keyword .subtitle {
+    font-size: 22px;
+  }
+}
+/* マッチ度を結果カード右上に固定 */
+body.tool-keyword .result-card {
+  position: relative;
+}
 
+body.tool-keyword .match {
+  position: absolute;
+  top: clamp(16px, 2vw, 22px);
+  right: clamp(16px, 2vw, 22px);
+  z-index: 2;
+  white-space: nowrap;
+}
+
+body.tool-keyword .result-title-row {
+  padding-right: 130px;
+  min-width: 0;
+}
+
+body.tool-keyword .area-name {
+  overflow-wrap: break-word;
+}
+@media (max-width: 760px) {
+  body.tool-keyword .match {
+    top: 16px;
+    right: 16px;
+    margin-top: 0;
+  }
+
+  body.tool-keyword .result-title-row {
+    padding-right: 0;
+  }
+}
